@@ -1,0 +1,11 @@
+.Home {
+  margin: 0 auto;
+  max-width: 1200px;
+  min-height: 100vh;
+}
+.section_search {
+  display: flex;
+  flex-direction: row;
+
+  gap: 16px;
+}

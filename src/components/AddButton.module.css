@@ -1,0 +1,28 @@
+.addbtn {
+  width: 168px;
+  height: 56px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 23px;
+  background-color: transparent;
+
+  cursor: pointer;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text {
+  z-index: 1;
+  position: absolute;
+  pointer-events: none;
+  font-size: 16px;
+  font-weight: bold;
+
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
