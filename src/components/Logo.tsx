@@ -18,10 +18,10 @@ export default function Logo() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  let logoSrc = '/svg/logo_lg.svg';
+  let logoSrc = '/images/logo_lg.svg';
   let paddingLeft = '24px';
   if (windowWidth <= 375) {
-    logoSrc = '/svg/logo_sm.svg';
+    logoSrc = '/images/logo_sm.svg';
     paddingLeft = '16px';
   } else if (windowWidth <= 744) {
     paddingLeft = '24px';

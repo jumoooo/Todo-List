@@ -1,24 +1,32 @@
-import { useState } from 'react';
-import style from './SearchInput.module.css';
-import SearchBox from './SearchBox';
+import React, { useRef, useState } from 'react';
+import SearchBox from './SearchBoxSvg';
 
-export default function SearchInput() {
-  const [search, setSearch] = useState('');
+import style from './SearchInput.module.css';
+
+interface SearchInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  onKeyDown: () => void;
+}
+export default function SearchInput({ value, onChange, onKeyDown }: SearchInputProps) {
+  const containRef = useRef<HTMLDivElement>(null);
+
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
+    onChange(e.target.value);
   };
-  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      console.log('Enter!');
     }
   };
   return (
-    <div className={style.search_wrapper}>
-      <SearchBox width={'100%'} />
+    <div ref={containRef} className={style.search_wrapper}>
+      <SearchBox width={'100%'} height={56} containRef={containRef} />
       <div className={style.input_wrapper}>
         <input
-          value={search}
-          onKeyDown={onKeyDown}
+          value={value}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && onKeyDown) onKeyDown();
+          }}
           onChange={onChangeSearch}
           placeholder="할 일을 입력해주세요"
         />

@@ -1,19 +1,28 @@
+import { RefObject } from 'react';
+import style from './SearchBoxSvg.module.css';
+
 // components/icons/InputWrapperSVG.tsx
 interface InputWrapperSVGProps {
   width?: string | number; // 기본값: "100%"
   height?: string | number; // 기본값: 56
   backgroundColor?: string; // 내부 사각형 색상
   borderColor?: string; // 테두리 색상
+  containRef?: RefObject<HTMLDivElement>; // widht, height 가 % 일때 참조할 Ref
 }
 
-export default function InputWrapperSVG({
+export default function SearchBoxSvg({
   width = 1000,
   height = 56,
   backgroundColor = '#F1F5F9',
   borderColor = '#0F172A',
+  containRef,
 }: InputWrapperSVGProps) {
-  const numericWidth = typeof width === 'number' ? width : 1000; // 기본 px값
-  const numericHeight = typeof height === 'number' ? height : 56;
+  let numericWidth = typeof width === 'number' ? width : 1000;
+  let numericHeight = typeof height === 'number' ? height : 56;
+  if (containRef) {
+    numericWidth = Number(containRef.current?.offsetWidth ?? numericWidth);
+    numericHeight = Number(containRef.current?.offsetHeight ?? numericHeight);
+  }
   return (
     <svg
       width={width}
@@ -22,25 +31,14 @@ export default function InputWrapperSVG({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{ display: 'block' }}
+      className={style.icon}
     >
       {/* 외부 테두리 */}
       <rect
         x="5"
         y="4.5"
-        width={
-          typeof width === 'number'
-            ? width - 6
-            : width.includes('%')
-            ? `calc(${width} - 6px)`
-            : Number(width) - 6
-        }
-        height={
-          typeof height === 'number'
-            ? height - 5.5
-            : height.includes('%')
-            ? `calc(${height} - 5.5px)`
-            : Number(width) - 5.5
-        }
+        width={numericWidth - 6}
+        height={numericHeight - 5.5}
         rx="23"
         fill={borderColor}
         stroke={borderColor}
@@ -50,20 +48,8 @@ export default function InputWrapperSVG({
       <rect
         x="1"
         y="1"
-        width={
-          typeof width === 'number'
-            ? width - 6
-            : width.includes('%')
-            ? `calc(${width} - 6px)`
-            : Number(width) - 6
-        }
-        height={
-          typeof height === 'number'
-            ? height - 5.5
-            : height.includes('%')
-            ? `calc(${height} - 5.5px)`
-            : Number(width) - 5.5
-        }
+        width={numericWidth - 6}
+        height={numericHeight - 5.5}
         rx="23"
         fill={backgroundColor}
         stroke={borderColor}

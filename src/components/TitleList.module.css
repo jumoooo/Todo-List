@@ -1,0 +1,62 @@
+.TitleList {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+.todo_list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+}
+.title {
+  height: 35px;
+  width: 101px;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.non_data {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.non_data > img {
+  width: 240px;
+  height: 240px;
+  margin-bottom: 24px;
+}
+.non_data > p {
+  margin: 0;
+  padding: 0;
+
+  font-size: 16px;
+  font-weight: bold;
+  color: #94a3b8;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  margin-bottom: 3px;
+}
+
+@media (max-width: 1200px) {
+  .non_data > img {
+    height: 240px;
+    width: 240px;
+    margin-bottom: 24px;
+  }
+}
+
+@media (max-width: 744px) {
+  .non_data > img {
+    height: 120px;
+    width: 120px;
+    margin-bottom: 16px;
+  }
+}

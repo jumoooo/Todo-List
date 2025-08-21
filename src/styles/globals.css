@@ -4,6 +4,7 @@ body {
   padding: 0px;
   background-color: white;
   font-family: 'NanumSquare', sans-serif;
+  box-sizing: border-box;
 }
 @font-face {
   font-family: 'NanumSquare';
@@ -35,4 +36,7 @@ body {
     url('/fonts/NanumSquareL.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
+}
+* {
+  box-sizing: border-box;
 }
