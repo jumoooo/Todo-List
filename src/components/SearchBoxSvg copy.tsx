@@ -7,7 +7,7 @@ interface InputWrapperSVGProps {
   height?: string | number; // 기본값: 56
   backgroundColor?: string; // 내부 사각형 색상
   borderColor?: string; // 테두리 색상
-  containRef?: RefObject<HTMLDivElement> | RefObject<HTMLButtonElement>; // widht, height 가 % 일때 참조할 Ref
+  containRef?: RefObject<HTMLDivElement>; // widht, height 가 % 일때 참조할 Ref
 }
 
 export default function SearchBoxSvg({

@@ -1,6 +1,8 @@
 import { useContext } from 'react';
-import style from './Item.module.css';
 import { TodoDispatchContext } from '@/pages';
+import Link from 'next/link';
+
+import style from './Item.module.css';
 
 interface ItemProps {
   id: number;
@@ -16,14 +18,15 @@ export default function Item({ id, isCompleted = true, name = '' }: ItemProps) {
     iconSrc = '/images/icons/chk_ok_icon.svg';
   }
   return (
-    <div
+    <Link
+      href={`/items/${id}`}
       className={style.Item}
       style={isCompleted ? { backgroundColor: '#EDE9FE' } : { backgroundColor: '#FFFFFF' }}
     >
       <img onClick={() => todoCtx?.updateTodo(id)} src={iconSrc} sizes="3232" />
-      <div className={style.text} style={isCompleted ? { textDecoration: 'line-through' } : {}}>
+      <h1 className={style.text} style={isCompleted ? { textDecoration: 'line-through' } : {}}>
         {name}
-      </div>
-    </div>
+      </h1>
+    </Link>
   );
 }

@@ -24,10 +24,29 @@
 }
 
 @media (min-width: 1200px) {
+  .Home {
+    padding: 24px;
+  }
   .section_list > .list_wrapper {
     width: 50%;
   }
   .section_list {
     flex-direction: row;
+  }
+}
+@media (max-width: 744px) {
+  .Home {
+    padding: 16px;
+  }
+}
+@media (max-width: 375px) {
+  .Home {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .Home {
+    padding: 16px;
   }
 }

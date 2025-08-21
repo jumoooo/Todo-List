@@ -1,6 +1,6 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useState } from 'react';
 import { InferGetServerSidePropsType } from 'next';
-import { TodoDispatchContextType, TodoListData, TodoListUpdateData } from '@/types';
+import { TodoDispatchContextType, TodoListUpdateData } from '@/types';
 
 import style from './index.module.css';
 
@@ -24,30 +24,10 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
   // 초기 데이터
   const [todoDataList, setTodoData] = useState(todoData);
   const [newName, setNewName] = useState('');
-  const [windowWidth, setWindowWidth] = useState<number>(0);
 
   // UI 보조 상태
   const [isSubmitting, setIsSubmitting] = useState(false); // 생성 중
   const [isRefreshing, setIsRefreshing] = useState(false); // 목록 재조회 중
-
-  // 반응형 padding 계산 부분
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    handleResize();
-    // 'resize' 때 핸들러 추가
-    window.addEventListener('resize', handleResize);
-    // unmoute 때 제거
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  let padding = '24px';
-  if (windowWidth <= 375) {
-    padding = '16px';
-  } else if (windowWidth <= 744) {
-    padding = '24px';
-  }
 
   // input 에 따른 name 변화
   const onChange = (value: string) => {
@@ -113,7 +93,7 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
   );
 
   return (
-    <div className={style.Home} style={{ padding }}>
+    <div className={style.Home}>
       <section className={style.section_search}>
         <SearchInput value={newName} onChange={onChange} onKeyDown={createNewName} />
         <Button
