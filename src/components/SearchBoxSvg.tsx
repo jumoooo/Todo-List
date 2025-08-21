@@ -22,10 +22,6 @@ export default function SearchBoxSvg({
   if (containRef) {
     numericWidth = Number(containRef.current?.offsetWidth ?? numericWidth);
     numericHeight = Number(containRef.current?.offsetHeight ?? numericHeight);
-
-    console.log(containRef);
-    console.log(numericWidth);
-    console.log(numericHeight);
   }
   return (
     <svg

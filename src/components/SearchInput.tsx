@@ -15,10 +15,6 @@ export default function SearchInput({ value, onChange, onKeyDown }: SearchInputP
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };
-  const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-    }
-  };
   useEffect(() => {
     if (!containRef.current) return;
 

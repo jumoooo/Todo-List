@@ -5,10 +5,18 @@ import SearchBoxSvg from './SearchBoxSvg';
 interface ButtonProps {
   child?: ReactNode;
   text: string;
+  color: string;
+  textColor: string;
   onClick: () => void;
 }
 
-export default function Button({ child, text, onClick }: ButtonProps) {
+export default function Button({
+  child,
+  text,
+  color = '#E2E8F0',
+  textColor,
+  onClick,
+}: ButtonProps) {
   const btnRef = useRef<HTMLButtonElement>(null);
   const [btnSize, setBtnSize] = useState({ w: 168, h: 56 }); // 기본값
   const onBtnClick = () => {
@@ -36,14 +44,14 @@ export default function Button({ child, text, onClick }: ButtonProps) {
   return (
     <button onClick={onBtnClick} className={style.btn} ref={btnRef}>
       <SearchBoxSvg
-        backgroundColor="#E2E8F0"
+        backgroundColor={color}
         width={btnSize.w}
         height={btnSize.h}
         containRef={btnRef}
       />
       <div className={style.text}>
         {child}
-        {text}
+        <p style={{ color: textColor }}>{text}</p>
       </div>
     </button>
   );
