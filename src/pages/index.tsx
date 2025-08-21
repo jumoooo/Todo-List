@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import { InferGetServerSidePropsType } from 'next';
+import { TodoDispatchContextType, TodoListData, TodoListUpdateData } from '@/types';
 
 import style from './index.module.css';
 
@@ -7,8 +8,7 @@ import SearchInput from '@/components/SearchInput';
 import Button from '@/components/Button';
 import ItemList from '@/components/ItemList';
 
-import fetchGetItems from '@/lib/fecth-get-items';
-import fecthCreateItem from '@/lib/fecth-create-item';
+import { fetchCreateItems, fetchGetItems, fetchUpdateItem } from '@/lib/fetch-crud-item';
 
 export const getServerSideProps = async () => {
   // 최초 SSR 에서 목록 받아오기
@@ -17,6 +17,8 @@ export const getServerSideProps = async () => {
     props: { todoData },
   };
 };
+
+export const TodoDispatchContext = createContext<TodoDispatchContextType | null>(null);
 
 export default function Home({ todoData }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   // 초기 데이터
@@ -68,10 +70,8 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
   // 할 일 생성
   const createNewName = useCallback(async () => {
     if (!newName.trim()) return;
-    if (isSubmitting) return;
     try {
-      setIsSubmitting(true);
-      const success = await fecthCreateItem(newName);
+      const success = await fetchCreateItems(newName);
       if (!success) {
         console.log('입력 실패 : ', success, ' ', newName);
       }
@@ -80,9 +80,37 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
       setNewName('');
       await refetchList();
     } finally {
-      setIsSubmitting(false);
     }
   }, [newName, isSubmitting, refetchList]);
+
+  // 변경
+  const updateTodo = useCallback(
+    async (id: number) => {
+      if (!id) return;
+      try {
+        const updateData = todoDataList.find((item) => Number(item.id) === Number(id));
+        if (!updateData) return;
+
+        const updateItem: TodoListUpdateData = {
+          name: updateData.name ?? '',
+          memo: updateData.memo ?? '',
+          imageUrl: updateData.imageUrl ?? '',
+          isCompleted: !updateData.isCompleted,
+        };
+
+        const success = await fetchUpdateItem(id, updateItem);
+        if (!success) {
+          console.log('변경 실패 : ', success, ' ', newName);
+        }
+        console.log('변경 성공 : ', success, ' ', newName);
+        await refetchList();
+      } catch (err) {
+        console.error(err);
+      } finally {
+      }
+    },
+    [todoDataList, refetchList],
+  );
 
   return (
     <div className={style.Home} style={{ padding }}>
@@ -94,15 +122,16 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
           child={<img src="/images/icons/plus_bl_icon_sm.png" width={16} height={16} />}
         />
       </section>
-
-      <section className={style.section_list}>
-        <div className={style.list_wrapper}>
-          <ItemList listData={todoDataList} isDone={false} isRefreshing={isRefreshing} />
-        </div>
-        <div className={style.list_wrapper}>
-          <ItemList listData={todoDataList} isRefreshing={isRefreshing} />
-        </div>
-      </section>
+      <TodoDispatchContext.Provider value={{ updateTodo }}>
+        <section className={style.section_list}>
+          <div className={style.list_wrapper}>
+            <ItemList listData={todoDataList} isDone={false} isRefreshing={isRefreshing} />
+          </div>
+          <div className={style.list_wrapper}>
+            <ItemList listData={todoDataList} isRefreshing={isRefreshing} />
+          </div>
+        </section>
+      </TodoDispatchContext.Provider>
     </div>
   );
 }

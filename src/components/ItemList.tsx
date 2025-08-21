@@ -1,17 +1,15 @@
 import style from './TitleList.module.css';
 import { TodoListData } from '@/types';
 
-import ListItem from './ListItem';
+import Item from './Item';
 
-export default function TitleList({
-  listData,
-  isDone = true,
-  isRefreshing,
-}: {
+interface ButtonProps {
   listData: Array<TodoListData>;
   isDone?: Boolean;
   isRefreshing: Boolean;
-}) {
+}
+
+export default function TitleList({ listData, isDone = true, isRefreshing }: ButtonProps) {
   //isDone : 해당 리스트가 Done 인가 아닌가
   let title_src = '/images/todo.svg';
   let non_src = '/images/icons/todo_icon_lg.svg';
@@ -36,7 +34,7 @@ export default function TitleList({
               <p>{'TODO를 새롭게 추가해주세요!'}</p>
             </div>
           ) : (
-            currentData.map((item) => <ListItem key={item?.id} {...item} />)
+            currentData.map((item) => <Item key={item?.id} {...item} />)
           )}
         </div>
       </div>
