@@ -34,18 +34,17 @@
     flex-direction: row;
   }
 }
+@media (max-width: 1200px) {
+  .Home {
+    padding: 16px;
+  }
+}
 @media (max-width: 744px) {
   .Home {
     padding: 16px;
   }
 }
 @media (max-width: 375px) {
-  .Home {
-    padding: 16px;
-  }
-}
-
-@media (max-width: 1200px) {
   .Home {
     padding: 16px;
   }

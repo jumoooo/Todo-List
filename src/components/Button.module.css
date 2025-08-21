@@ -28,26 +28,12 @@
   margin-top: -5.5px;
 }
 
-@media (max-width: 1200px) {
-  .btn {
-    height: 56px;
-    width: 168px;
-  }
-  .btn > .text {
-    flex-direction: row;
-  }
-}
-
 @media (max-width: 744px) {
   .btn {
     height: 56px;
     width: 56px;
   }
-  .btn > .text {
-    flex-direction: row;
-
-    /* 텍스트 가리기 */
-    text-indent: -9999px;
-    overflow: hidden;
+  .btn > .text > p {
+    display: none;
   }
 }

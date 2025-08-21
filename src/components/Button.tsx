@@ -3,22 +3,28 @@ import style from './Button.module.css';
 import SearchBoxSvg from './SearchBoxSvg';
 
 interface ButtonProps {
+  width?: number;
+  height?: number;
   child?: ReactNode;
-  text: string;
-  color: string;
-  textColor: string;
+  text?: string;
+  color?: string;
+  textColor?: string;
+  holdSize?: Boolean;
   onClick: () => void;
 }
 
 export default function Button({
+  width = 168,
+  height = 56,
   child,
   text,
   color = '#E2E8F0',
   textColor,
+  holdSize = false,
   onClick,
 }: ButtonProps) {
   const btnRef = useRef<HTMLButtonElement>(null);
-  const [btnSize, setBtnSize] = useState({ w: 168, h: 56 }); // 기본값
+  const [btnSize, setBtnSize] = useState({ w: width, h: height }); // 기본값
   const onBtnClick = () => {
     onClick();
   };
@@ -42,7 +48,12 @@ export default function Button({
     return () => observer.disconnect();
   }, []);
   return (
-    <button onClick={onBtnClick} className={style.btn} ref={btnRef}>
+    <button
+      onClick={onBtnClick}
+      className={style.btn}
+      ref={btnRef}
+      style={holdSize ? { width: width, height: height } : {}}
+    >
       <SearchBoxSvg
         backgroundColor={color}
         width={btnSize.w}
@@ -51,7 +62,9 @@ export default function Button({
       />
       <div className={style.text}>
         {child}
-        <p style={{ color: textColor }}>{text}</p>
+        <p style={holdSize ? { color: textColor, display: 'flex' } : { color: textColor }}>
+          {text}
+        </p>
       </div>
     </button>
   );

@@ -52,6 +52,7 @@ export default function ItemDetail({
           <Button
             text="수정 완료"
             onClick={() => {}}
+            holdSize={true}
             child={<img src="/images/icons/check_icon.svg" width={16} height={16} />}
           />
           <Button
@@ -59,6 +60,7 @@ export default function ItemDetail({
             onClick={() => {}}
             color={'#F43F5E'}
             textColor={'white'}
+            holdSize={true}
             child={<img src="/images/icons/x_icon.svg" width={16} height={16} />}
           />
         </section>
