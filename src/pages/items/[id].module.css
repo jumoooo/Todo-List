@@ -77,7 +77,7 @@
   background-size: cover;
 }
 .img_empty_wrapper {
-  border: 2px dashed #cbd5e1;
+  border: 2px dashed var(--color-salte-300);
   background-color: #f8fafc;
 
   background-image: url('/images/icons/img_icon.svg');

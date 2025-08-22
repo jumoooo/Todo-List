@@ -13,8 +13,8 @@ interface InputWrapperSVGProps {
 export default function SearchBoxSvg({
   width = 1000,
   height = 56,
-  backgroundColor = '#F1F5F9',
-  borderColor = '#0F172A',
+  backgroundColor = 'var(--color-salte-100)',
+  borderColor = 'var(--color-salte-900)',
   containRef,
 }: InputWrapperSVGProps) {
   let numericWidth = typeof width === 'number' ? width : 1000;

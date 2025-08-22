@@ -16,7 +16,11 @@ export default function Item({ id, isCompleted = true, name = '' }: ItemProps) {
     <Link
       href={`/items/${id}`}
       className={style.Item}
-      style={isCompleted ? { backgroundColor: '#EDE9FE' } : { backgroundColor: '#FFFFFF' }}
+      style={
+        isCompleted
+          ? { backgroundColor: 'var(--color-violet-100)' }
+          : { backgroundColor: '#FFFFFF' }
+      }
     >
       <img
         onClick={(e) => {

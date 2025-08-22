@@ -5,7 +5,7 @@
 .header {
   height: 60px;
   background-color: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--color-salte-200);
 
   display: flex;
   justify-content: center;
