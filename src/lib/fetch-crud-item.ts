@@ -75,11 +75,26 @@ export async function fetchCreateItems(name: string): Promise<Boolean> {
  */
 export async function fetchUpdateItem(
   itemId: number,
-  todoData: TodoListUpdateData,
+  todoData?: TodoListUpdateData,
 ): Promise<Boolean> {
   const url = `https://assignment-todolist-api.vercel.app/api/${tenantId}/items/${itemId}`;
 
   try {
+    // 해당 todo 상세 조회
+    const todoItemData = await fetchGetIdItem(itemId);
+    if (!todoItemData) throw new Error('변경하려는 할 일이 데이터상 없습니다.');
+
+    // 변수 todoData 없이 변경요청 시 isCompleted 만 변경
+    if (!todoData) {
+      todoData = {
+        name: todoItemData.name || '',
+        memo: todoItemData.memo || '',
+        imageUrl: todoItemData.imageUrl || '',
+        isCompleted: !todoItemData.isCompleted,
+      };
+    }
+
+    // 변경 진행
     const response = await fetch(url, {
       method: 'PATCH',
       headers: {

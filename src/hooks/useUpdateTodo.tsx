@@ -2,19 +2,19 @@ import { fetchUpdateItem } from '@/lib/fetch-crud-item';
 import { TodoListUpdateData } from '@/types';
 import { useCallback, useState } from 'react';
 
-// 변경 후 리프레쉬
+// 변경 후 리프레쉬 Hook
 export function useUpdateTodo(refetchList: () => Promise<void>) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
   const updateTodo = useCallback(
-    async (id: number, item: TodoListUpdateData) => {
-      if (id === null) return;
+    async (itemId: number, item?: TodoListUpdateData) => {
+      if (itemId === null) return;
       setIsLoading(true);
       setError(null);
 
       try {
-        const success = await fetchUpdateItem(id, item);
+        const success = await fetchUpdateItem(itemId, item);
         if (!success) {
           window.alert('변경 실패하였습니다.');
           throw new Error('변경 실패');

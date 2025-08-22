@@ -10,10 +10,13 @@ import ItemList from '@/components/ItemList';
 
 import { fetchCreateItems, fetchGetItems, fetchUpdateItem } from '@/lib/fetch-crud-item';
 import Head from 'next/head';
+import { useUpdateTodo } from '@/hooks/useUpdateTodo';
+import { useRefetchLoading } from '@/hooks/useRefetchLoading';
 
 export const getServerSideProps = async () => {
   // 최초 SSR 에서 목록 받아오기
   const [todoData] = await Promise.all([fetchGetItems()]);
+  console.log(todoData);
   return {
     props: { todoData },
   };
@@ -26,10 +29,6 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
   const [todoDataList, setTodoData] = useState(todoData);
   const [newName, setNewName] = useState('');
 
-  // UI 보조 상태
-  const [isSubmitting, setIsSubmitting] = useState(false); // 생성 중
-  const [isRefreshing, setIsRefreshing] = useState(false); // 목록 재조회 중
-
   // input 에 따른 name 변화
   const onChange = (value: string) => {
     setNewName(value);
@@ -38,13 +37,11 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
   // 할 일 목록 재조회
   const refetchList = useCallback(async () => {
     try {
-      setIsRefreshing(true);
       const fresh = await fetchGetItems();
       setTodoData(fresh);
     } catch (err) {
       console.log(err);
     } finally {
-      setIsRefreshing(false);
     }
   }, []);
 
@@ -55,43 +52,16 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
       const success = await fetchCreateItems(newName);
       if (!success) {
         console.log('입력 실패 : ', success, ' ', newName);
+        return;
       }
       console.log('입력 성공 : ', success, ' ', newName);
-      // 초기화
       setNewName('');
       await refetchList();
     } finally {
     }
-  }, [newName, isSubmitting, refetchList]);
+  }, [newName, refetchList]);
 
-  // 변경
-  const updateTodo = useCallback(
-    async (id: number) => {
-      if (!id) return;
-      try {
-        const updateData = todoDataList.find((item) => Number(item.id) === Number(id));
-        if (!updateData) return;
-
-        const updateItem: TodoListUpdateData = {
-          name: updateData.name ?? '',
-          memo: updateData.memo ?? '',
-          imageUrl: updateData.imageUrl ?? '',
-          isCompleted: !updateData.isCompleted,
-        };
-
-        const success = await fetchUpdateItem(id, updateItem);
-        if (!success) {
-          console.log('변경 실패');
-        }
-        console.log('변경 성공');
-        await refetchList();
-      } catch (err) {
-        console.error(err);
-      } finally {
-      }
-    },
-    [todoDataList, refetchList],
-  );
+  const { fetching: updateTodo, isLoading } = useRefetchLoading(refetchList, fetchUpdateItem);
 
   return (
     <div className={style.Home}>
@@ -109,10 +79,10 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
       <TodoDispatchContext.Provider value={{ updateTodo }}>
         <section className={style.section_list}>
           <div className={style.list_wrapper}>
-            <ItemList listData={todoDataList} isDone={false} isRefreshing={isRefreshing} />
+            <ItemList listData={todoDataList} isDone={false} isRefreshing={isLoading} />
           </div>
           <div className={style.list_wrapper}>
-            <ItemList listData={todoDataList} isRefreshing={isRefreshing} />
+            <ItemList listData={todoDataList} isRefreshing={isLoading} />
           </div>
         </section>
       </TodoDispatchContext.Provider>

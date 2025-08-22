@@ -8,9 +8,11 @@ interface ItemProps {
   id: number;
   isCompleted?: Boolean;
   name?: string;
+  memo?: string;
+  imageUrl: string;
 }
 
-export default function Item({ id, isCompleted = true, name = '' }: ItemProps) {
+export default function Item({ id, isCompleted = true, name = '', memo, imageUrl }: ItemProps) {
   const todoCtx = useContext(TodoDispatchContext);
   return (
     <Link
@@ -29,7 +31,6 @@ export default function Item({ id, isCompleted = true, name = '' }: ItemProps) {
           todoCtx?.updateTodo(id);
         }}
         src={isCompleted ? '/images/icons/chk_ok_icon.svg' : '/images/icons/chk_no_icon.svg'}
-        sizes="3232"
       />
       <h1 className={style.text} style={isCompleted ? { textDecoration: 'line-through' } : {}}>
         {name}
