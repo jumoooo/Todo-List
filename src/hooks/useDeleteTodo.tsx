@@ -14,10 +14,9 @@ export function useDeleteTodo() {
     try {
       const success = await fetchDeleteItem(itemId);
       if (!success) {
-        console.log('삭제 실패 : ', success);
-        throw new Error('변경 실패');
+        window.alert('삭제 실패하였습니다.');
+        throw new Error('삭제 실패');
       }
-      console.log('삭제 성공 : ', success);
     } catch (err) {
       console.error(err);
       setError(err instanceof Error ? err : new Error('Unknown error'));

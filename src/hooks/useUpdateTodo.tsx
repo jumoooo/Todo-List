@@ -16,10 +16,9 @@ export function useUpdateTodo(refetchList: () => Promise<void>) {
       try {
         const success = await fetchUpdateItem(id, item);
         if (!success) {
-          console.log('변경 실패 : ', success);
+          window.alert('변경 실패하였습니다.');
           throw new Error('변경 실패');
         }
-        console.log('변경 성공 : ', success);
         await refetchList();
       } catch (err) {
         console.error(err);
