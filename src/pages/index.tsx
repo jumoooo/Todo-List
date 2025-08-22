@@ -9,6 +9,7 @@ import Button from '@/components/Button';
 import ItemList from '@/components/ItemList';
 
 import { fetchCreateItems, fetchGetItems, fetchUpdateItem } from '@/lib/fetch-crud-item';
+import Head from 'next/head';
 
 export const getServerSideProps = async () => {
   // 최초 SSR 에서 목록 받아오기
@@ -94,6 +95,9 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
 
   return (
     <div className={style.Home}>
+      <Head>
+        <title>할 일 목록 페이지</title>
+      </Head>
       <section className={style.section_search}>
         <SearchInput value={newName} onChange={onChange} onKeyDown={createNewName} />
         <Button

@@ -8,6 +8,7 @@ import { useUpdateTodo } from '@/hooks/useUpdateTodo';
 import { useParams } from 'next/navigation';
 import { useDeleteTodo } from '@/hooks/useDeleteTodo';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const id = context.params?.id;
@@ -100,6 +101,9 @@ export default function ItemDetail({
   };
   return (
     <div className={style.ItemDetail}>
+      <Head>
+        <title>{todoData?.name} (할 일 상세 페이지)</title>
+      </Head>
       <div className={style.container}>
         <section className="section_title">
           <div
@@ -118,7 +122,7 @@ export default function ItemDetail({
               value={todoData?.name}
               onChange={(e) => setTodoData({ ...todoData!, name: e.target.value })}
               className={style.text}
-            ></input>
+            />
           </div>
         </section>
         <section className={style.section_contents}>
