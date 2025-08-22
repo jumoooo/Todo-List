@@ -114,7 +114,11 @@ export default function ItemDetail({
               onClick={() => setTodoData({ ...todoData!, isCompleted: !todoData!.isCompleted })}
               src={icon_src}
             />
-            <div className={style.text}>{todoData?.name}</div>
+            <input
+              value={todoData?.name}
+              onChange={(e) => setTodoData({ ...todoData!, name: e.target.value })}
+              className={style.text}
+            ></input>
           </div>
         </section>
         <section className={style.section_contents}>
