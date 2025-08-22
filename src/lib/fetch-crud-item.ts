@@ -96,3 +96,47 @@ export async function fetchUpdateItem(
     return false;
   }
 }
+
+/**
+ * image upload 후 URL 반환
+ * @param imageFile
+ * @returns URL 반환 (string)
+ */
+export async function fetchUploadImage(imageFile: File): Promise<string> {
+  const url = `https://assignment-todolist-api.vercel.app/api/${tenantId}/images/upload`;
+  const formData = new FormData();
+  formData.append('image', imageFile);
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) throw new Error('이미지 업로드 실패');
+    const data = await response.json();
+    return data.url || '';
+  } catch (err) {
+    console.error(err);
+    return '';
+  }
+}
+
+/**
+ * Todo 삭제
+ * @param itemId 할 일 id
+ * @returns 성공 여부 (true/false)
+ */
+export async function fetchDeleteItem(itemId: number): Promise<Boolean> {
+  const url = `https://assignment-todolist-api.vercel.app/api/${tenantId}/items/${itemId}`;
+  try {
+    const response = await fetch(url, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) throw new Error('이미지 업로드 실패');
+    return true;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+}

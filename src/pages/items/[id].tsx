@@ -1,8 +1,13 @@
 import style from './[id].module.css';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { fetchGetIdItem } from '@/lib/fetch-crud-item';
-import { useCallback, useContext } from 'react';
+import { fetchGetIdItem, fetchUploadImage } from '@/lib/fetch-crud-item';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Button from '@/components/Button';
+import { TodoListUpdateData } from '@/types';
+import { useUpdateTodo } from '@/hooks/useUpdateTodo';
+import { useParams } from 'next/navigation';
+import { useDeleteTodo } from '@/hooks/useDeleteTodo';
+import { useRouter } from 'next/router';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const id = context.params?.id;
@@ -15,50 +20,158 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 export default function ItemDetail({
   item,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  if (!item) return '문제 발생';
+  const [todoData, setTodoData] = useState(item);
+  const memoRef = useRef<HTMLDivElement>(null);
+  const param = useParams();
+  const id = Number(param.id);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (memoRef.current && todoData?.memo) {
+      memoRef.current.innerText = todoData.memo;
+    }
+  }, [todoData?.id]);
+
+  // 화면 데이터 리프레쉬
+  const refetchList = useCallback(async () => {
+    try {
+      const fresh = await fetchGetIdItem(Number(id));
+      setTodoData(fresh);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [param]);
+
+  const { updateTodo, isLoading: updateLoading } = useUpdateTodo(refetchList);
+  const { deleteTodo, isLoading: deleteLoading } = useDeleteTodo();
+
   let icon_src = '/images/icons/chk_no_icon.svg';
-  if (item.isCompleted) {
+  if (todoData?.isCompleted) {
     icon_src = '/images/icons/chk_ok_icon.svg';
   }
 
+  // todoData에 imageURL 추가
+  const onClickImageAddBtn = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('파일 용량은 최대 5MB까지 가능합니다.');
+      e.target.value = ''; // 선택 초기화
+      return;
+    }
+    const regex = /^[a-zA-Z0-9_\-]+\.[a-zA-Z]{1,5}$/;
+    if (!regex.test(file.name)) {
+      alert('파일 이름은 영어, 숫자, _, - 만 가능합니다.');
+      e.target.value = ''; // 선택 초기화
+      return;
+    }
+    const imageUrl = await fetchUploadImage(file);
+    if (!imageUrl) return;
+    console.log(imageUrl);
+    if (todoData) {
+      setTodoData({
+        ...todoData,
+        imageUrl: imageUrl,
+      });
+    }
+  };
+
+  // 수정 버튼 클릭
+  const onClickUpdate = () => {
+    if (!todoData || updateLoading || !window.confirm('수정 하시겠습니까?')) return;
+
+    const updateData: TodoListUpdateData = {
+      name: todoData.name,
+      memo: todoData.memo,
+      imageUrl: todoData.imageUrl,
+      isCompleted: todoData.isCompleted,
+    };
+    // 변경
+    updateTodo(id, updateData);
+  };
+
+  // 삭제 버튼 클릭
+  const onChickDelete = async () => {
+    if (!id || !todoData || deleteLoading || !window.confirm('삭제 하시겠습니까?')) return;
+
+    await deleteTodo(id);
+    if (!deleteLoading) router.push('/');
+  };
   return (
     <div className={style.ItemDetail}>
       <div className={style.container}>
         <section className="section_title">
-          <div className={style.title_wrapper}>
-            <img onClick={() => console.log('hi')} src={icon_src} sizes="3232" />
-            <div
-              className={style.text}
-              style={item.isCompleted ? { textDecoration: 'line-through' } : {}}
-            >
-              {item.name}
-            </div>
+          <div
+            className={style.title_wrapper}
+            style={
+              todoData?.isCompleted
+                ? { backgroundColor: 'var(--color-violet-100)' }
+                : { backgroundColor: '#FFFFFF' }
+            }
+          >
+            <img
+              onClick={() => setTodoData({ ...todoData!, isCompleted: !todoData!.isCompleted })}
+              src={icon_src}
+            />
+            <div className={style.text}>{todoData?.name}</div>
           </div>
         </section>
         <section className={style.section_contents}>
-          <div className={style.img_wrapper}>
-            <button className={style.img_btn}>
-              <img src="/images/icons/plus_bl_icon_sm.png" />
-            </button>
-          </div>
+          {todoData?.imageUrl ? (
+            <div
+              className={style.img_full_wrapper}
+              style={{ backgroundImage: `url(${todoData?.imageUrl})` }}
+            >
+              <label className={style.img_btn} style={{ backgroundColor: '#0F172A80' }}>
+                <img src="/images/icons/edit_icon.svg" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={onClickImageAddBtn}
+                  style={{ display: 'none' }}
+                />
+              </label>
+            </div>
+          ) : (
+            <div className={style.img_empty_wrapper}>
+              <label
+                className={style.img_btn}
+                style={{ backgroundColor: 'var(--color-salte-200)' }}
+              >
+                <img src="/images/icons/plus_bl_icon_sm.png" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={onClickImageAddBtn}
+                  style={{ display: 'none' }}
+                />
+              </label>
+            </div>
+          )}
           <div className={style.memo_wrapper}>
             <h2>Memo</h2>
-            <div contentEditable suppressContentEditableWarning>
-              {'오메가 3, 프로폴리스, 아연 챙겨먹기'}
-            </div>
+            <div
+              ref={memoRef}
+              contentEditable
+              suppressContentEditableWarning
+              onInput={(e) =>
+                setTodoData({ ...todoData!, memo: (e.target as HTMLElement).innerText })
+              }
+            ></div>
           </div>
         </section>
         <section className={style.section_btn}>
           <Button
-            text="수정 완료"
-            onClick={() => {}}
+            text={updateLoading ? '로딩중...' : '수정 완료'}
+            onClick={onClickUpdate}
             holdSize={true}
             child={<img src="/images/icons/check_icon.svg" width={16} height={16} />}
           />
           <Button
-            text="삭제하기"
-            onClick={() => {}}
-            color={'#F43F5E'}
+            text={deleteLoading ? '로딩중...' : '삭제하기'}
+            onClick={onChickDelete}
+            color={'var(--color-rose-500)'}
             textColor={'white'}
             holdSize={true}
             child={<img src="/images/icons/x_icon.svg" width={16} height={16} />}

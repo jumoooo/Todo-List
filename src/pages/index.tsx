@@ -80,9 +80,9 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
 
         const success = await fetchUpdateItem(id, updateItem);
         if (!success) {
-          console.log('변경 실패 : ', success, ' ', newName);
+          console.log('변경 실패');
         }
-        console.log('변경 성공 : ', success, ' ', newName);
+        console.log('변경 성공');
         await refetchList();
       } catch (err) {
         console.error(err);

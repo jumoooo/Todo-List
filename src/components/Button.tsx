@@ -18,7 +18,7 @@ export default function Button({
   height = 56,
   child,
   text,
-  color = '#E2E8F0',
+  color = 'var(--color-salte-200)',
   textColor,
   holdSize = false,
   onClick,
