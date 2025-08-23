@@ -1,50 +1,55 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import SearchBoxSvg from './SearchBoxSvg';
 
 import style from './SearchInput.module.css';
 
 interface SearchInputProps {
+  placeholder?: string;
   value: string;
   onChange: (value: string) => void;
-  onKeyDown: () => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
-export default function SearchInput({ value, onChange, onKeyDown }: SearchInputProps) {
-  const [btnSize, setBtnSize] = useState({ w: 168, h: 56 }); // 기본값
+export default function SearchInput({
+  placeholder = '할 일을 입력해주세요',
+  value,
+  onChange,
+  onKeyDown,
+}: SearchInputProps) {
+  const [containerSize, setContainerSize] = useState({ w: 168, h: 56 }); // 기본값
   const containRef = useRef<HTMLDivElement>(null);
 
-  const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value);
-  };
-  useEffect(() => {
-    if (!containRef.current) return;
-
+  useLayoutEffect(() => {
     const updateSize = () => {
-      const width = containRef.current?.offsetWidth ?? 168;
-      const height = containRef.current?.offsetHeight ?? 56;
-      setBtnSize({ w: width, h: height });
+      if (!containRef.current) return;
+      const width = containRef.current.offsetWidth || containerSize.w;
+      const height = containRef.current.offsetHeight || containerSize.h;
+      setContainerSize({ w: width, h: height });
     };
 
-    // 초기 사이즈
+    // 초기 실행
     updateSize();
 
-    const observer = new ResizeObserver(updateSize);
-    observer.observe(containRef.current);
+    // 윈도우 리사이즈 시 실행
+    window.addEventListener('resize', updateSize);
 
-    // 언마운트 시 해제
-    return () => observer.disconnect();
+    return () => {
+      window.removeEventListener('resize', updateSize);
+    };
   }, []);
 
   return (
     <div ref={containRef} className={style.search_wrapper}>
-      <SearchBoxSvg width={'100%'} height={56} containRef={containRef} />
+      <SearchBoxSvg width={'100%'} height={containerSize.h} containRef={containRef} />
       <div className={style.input_wrapper}>
         <input
           value={value}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && onKeyDown) onKeyDown();
+            if (e.key === 'Enter' && onKeyDown) onKeyDown(e);
           }}
-          onChange={onChangeSearch}
-          placeholder="할 일을 입력해주세요"
+          onChange={(e) => {
+            onChange(e.target.value);
+          }}
+          placeholder={placeholder}
         />
       </div>
     </div>

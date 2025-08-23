@@ -37,7 +37,7 @@ export default function SearchBoxSvg({
       <rect
         x="5"
         y="4.5"
-        width={numericWidth - 6}
+        width={numericWidth - 6 <= 0 ? 0 : numericWidth - 6}
         height={numericHeight - 5.5}
         rx="23"
         fill={borderColor}
@@ -48,7 +48,7 @@ export default function SearchBoxSvg({
       <rect
         x="1"
         y="1"
-        width={numericWidth - 6}
+        width={numericWidth - 6 <= 0 ? 0 : numericWidth - 6}
         height={numericHeight - 5.5}
         rx="23"
         fill={backgroundColor}

@@ -1,14 +1,14 @@
 import style from './[id].module.css';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { fetchGetIdItem, fetchUploadImage } from '@/lib/fetch-crud-item';
+import { fetchGetIdItem, fetchUpdateItem, fetchUploadImage } from '@/lib/fetch-crud-item';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Button from '@/components/Button';
 import { TodoListUpdateData } from '@/types';
-import { useUpdateTodo } from '@/hooks/useUpdateTodo';
 import { useParams } from 'next/navigation';
 import { useDeleteTodo } from '@/hooks/useDeleteTodo';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import { useRefetchLoading } from '@/hooks/useRefetchLoading';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const id = context.params?.id;
@@ -43,13 +43,11 @@ export default function ItemDetail({
     }
   }, [param]);
 
-  const { updateTodo, isLoading: updateLoading } = useUpdateTodo(refetchList);
+  const { fetching: updateTodo, isLoading: updateLoading } = useRefetchLoading(
+    refetchList,
+    fetchUpdateItem,
+  );
   const { deleteTodo, isLoading: deleteLoading } = useDeleteTodo();
-
-  let icon_src = '/images/icons/chk_no_icon.svg';
-  if (todoData?.isCompleted) {
-    icon_src = '/images/icons/chk_ok_icon.svg';
-  }
 
   // todoData에 imageURL 추가
   const onClickImageAddBtn = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +67,6 @@ export default function ItemDetail({
     }
     const imageUrl = await fetchUploadImage(file);
     if (!imageUrl) return;
-    console.log(imageUrl);
     if (todoData) {
       setTodoData({
         ...todoData,
@@ -116,7 +113,11 @@ export default function ItemDetail({
           >
             <img
               onClick={() => setTodoData({ ...todoData!, isCompleted: !todoData!.isCompleted })}
-              src={icon_src}
+              src={
+                todoData?.isCompleted
+                  ? '/images/icons/chk_ok_icon.svg'
+                  : '/images/icons/chk_no_icon.svg'
+              }
             />
             <input
               value={todoData?.name}
