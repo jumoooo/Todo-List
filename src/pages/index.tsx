@@ -1,4 +1,4 @@
-import { createContext, useCallback, useState } from 'react';
+import { createContext, useCallback, useMemo, useState } from 'react';
 import { InferGetServerSidePropsType } from 'next';
 import { TodoDispatchContextType } from '@/types';
 
@@ -27,11 +27,6 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
   const [todoDataList, setTodoData] = useState(todoData);
   const [newName, setNewName] = useState('');
 
-  // input 에 따른 name 변화
-  const onChange = (value: string) => {
-    setNewName(value);
-  };
-
   // 할 일 목록 재조회
   const refetchList = useCallback(async () => {
     try {
@@ -57,7 +52,23 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
     } catch (err) {
       window.alert('할 일 생성에 실패하였습니다.');
     }
-  }, [newName, refetchList, isCreateLoading]);
+  }, [newName, isCreateLoading]);
+
+  const handleInputChange = useCallback((value: string) => {
+    setNewName(value);
+  }, []);
+
+  const inputPlaceholder = useMemo(
+    () => (isCreateLoading ? '할 일 생성중...' : '할 일을 입력해주세요'),
+    [isCreateLoading],
+  );
+  const buttonPlaceholder = useMemo(
+    () => (isCreateLoading ? '할 일 생성중...' : '추가하기'),
+    [isCreateLoading],
+  );
+
+  const todoItems = useMemo(() => todoDataList.filter((item) => !item.isCompleted), [todoDataList]);
+  const doneItems = useMemo(() => todoDataList.filter((item) => item.isCompleted), [todoDataList]);
 
   return (
     <div className={style.Home}>
@@ -66,24 +77,25 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
       </Head>
       <section className={style.section_search}>
         <SearchInput
-          placeholder={isCreateLoading ? '할 일 생성중...' : '할 일을 입력해주세요'}
+          placeholder={inputPlaceholder}
+          disabled={isCreateLoading}
           value={newName}
-          onChange={onChange}
+          onChange={handleInputChange}
           onKeyDown={createNewName}
         />
         <Button
           onClick={createNewName}
-          text={isCreateLoading ? '할 일 생성중...' : '추가하기'}
+          text={buttonPlaceholder}
           child={<img src="/images/icons/plus_bl_icon_sm.png" width={16} height={16} />}
         />
       </section>
       <TodoDispatchContext.Provider value={{ updateTodo }}>
         <section className={style.section_list}>
           <div className={style.list_wrapper}>
-            <ItemList listData={todoDataList} isDone={false} isRefreshing={isLoading} />
+            <ItemList listData={todoItems} isDone={false} isRefreshing={isLoading} />
           </div>
           <div className={style.list_wrapper}>
-            <ItemList listData={todoDataList} isRefreshing={isLoading} />
+            <ItemList listData={doneItems} isRefreshing={isLoading} />
           </div>
         </section>
       </TodoDispatchContext.Provider>

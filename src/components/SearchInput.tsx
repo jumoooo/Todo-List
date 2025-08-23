@@ -5,12 +5,14 @@ import style from './SearchInput.module.css';
 
 interface SearchInputProps {
   placeholder?: string;
+  disabled?: Boolean;
   value: string;
   onChange: (value: string) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 export default function SearchInput({
   placeholder = '할 일을 입력해주세요',
+  disabled = false,
   value,
   onChange,
   onKeyDown,
@@ -44,7 +46,7 @@ export default function SearchInput({
         <input
           value={value}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && onKeyDown) onKeyDown(e);
+            if (!disabled && e.key === 'Enter' && onKeyDown) onKeyDown(e);
           }}
           onChange={(e) => {
             onChange(e.target.value);

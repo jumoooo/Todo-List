@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import style from './Button.module.css';
 import SearchBoxSvg from './SearchBoxSvg';
 
@@ -13,7 +13,7 @@ interface ButtonProps {
   onClick: () => void;
 }
 
-export default function Button({
+const Button: React.FC<ButtonProps> = ({
   width = 168,
   height = 56,
   child,
@@ -22,7 +22,7 @@ export default function Button({
   textColor,
   holdSize = false,
   onClick,
-}: ButtonProps) {
+}) => {
   const btnRef = useRef<HTMLButtonElement>(null);
   const [btnSize, setBtnSize] = useState({ w: width, h: height }); // 기본값
   const onBtnClick = () => {
@@ -68,4 +68,6 @@ export default function Button({
       </div>
     </button>
   );
-}
+};
+
+export default React.memo(Button);

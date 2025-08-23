@@ -1,10 +1,22 @@
 .logo {
   height: 100%;
-  width: auto;
+  padding-left: 24px;
+
+  display: flex;
+  align-items: center;
 
   cursor: pointer;
 }
-.logo > img {
+.logo > picture {
+  height: 100%;
+}
+.logo > picture > img {
   height: 100%;
   width: auto;
+}
+
+@media (max-width: 375px) {
+  .logo {
+    padding-left: 16px;
+  }
 }

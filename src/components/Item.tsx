@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { TodoDispatchContext } from '@/pages';
 import Link from 'next/link';
 
@@ -12,7 +12,7 @@ interface ItemProps {
   imageUrl: string;
 }
 
-export default function Item({ id, isCompleted = true, name = '', memo, imageUrl }: ItemProps) {
+const Item: React.FC<ItemProps> = ({ id, isCompleted = true, name = '', memo, imageUrl }) => {
   const todoCtx = useContext(TodoDispatchContext);
   return (
     <Link
@@ -37,4 +37,6 @@ export default function Item({ id, isCompleted = true, name = '', memo, imageUrl
       </h1>
     </Link>
   );
-}
+};
+
+export default React.memo(Item);
