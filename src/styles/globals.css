@@ -1,10 +1,14 @@
 html,
 body {
+  min-width: 375px;
+
   margin: 0px;
   padding: 0px;
   background-color: white;
   font-family: 'NanumSquare', sans-serif;
   box-sizing: border-box;
+
+  overflow-x: auto;
 }
 @font-face {
   font-family: 'NanumSquare';
