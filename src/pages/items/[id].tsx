@@ -2,15 +2,17 @@ import style from './[id].module.css';
 
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { fetchGetIdItem, fetchUpdateItem, fetchUploadImage } from '@/lib/fetch-crud-item';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { TodoListUpdateData } from '@/types';
 import { useParams } from 'next/navigation';
 import { useDeleteTodo } from '@/hooks/useDeleteTodo';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 import { useRefetchLoading } from '@/hooks/useRefetchLoading';
 
+import Head from 'next/head';
+import TodoTitle from '@/components/TodoTitle';
 import Button from '@/components/Button';
+import ImageUploader from '@/components/ImageUploader';
 import MemoEditer from '@/components/MemoEditer';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
@@ -45,7 +47,7 @@ export default function ItemDetail({
   );
   const { deleteTodo, isLoading: deleteLoading } = useDeleteTodo();
 
-  // 이미지 유효성 검사
+  // image 유효성 검사
   const validateFile = (file: File) => {
     if (file.size > 5 * 1024 * 1024) {
       alert('파일 용량은 최대 5MB까지 가능합니다.');
@@ -100,74 +102,41 @@ export default function ItemDetail({
     if (!deleteLoading) router.push('/');
   }, [id, todoData, deleteLoading]);
 
-  const img_src = todoData?.isCompleted
-    ? '/images/icons/chk_ok_icon.svg'
-    : '/images/icons/chk_no_icon.svg';
-
-  const nameStyle = todoData?.isCompleted
-    ? { backgroundColor: 'var(--color-violet-100)' }
-    : { backgroundColor: '#FFFFFF' };
-
   const updateLoadingText = updateLoading ? '로딩중...' : '수정 완료';
-
   const deleteLoadingText = deleteLoading ? '로딩중...' : '삭제하기';
-  const hasImage = Boolean(todoData?.imageUrl);
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const textarea = e.target;
-    textarea.style.height = 'auto'; // 초기화
-    textarea.style.height = `${textarea.scrollHeight}px`; // 실제 내용 높이만큼 늘림
+  const onClickTitleChk = () => {
+    setTodoData({ ...todoData!, isCompleted: !todoData!.isCompleted });
   };
-
+  const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTodoData({ ...todoData!, name: e.target.value });
+  };
   return (
     <div className={style.detailPage}>
       <Head>
         <title>할 일 상세 페이지</title>
       </Head>
-      <div className={style.detailContainer}>
-        <section className="section_title">
-          <div className={style.title_wrapper} style={nameStyle}>
-            <img
-              onClick={() => setTodoData({ ...todoData!, isCompleted: !todoData!.isCompleted })}
-              src={img_src}
-            />
-            <input
-              value={todoData?.name}
-              onChange={(e) => setTodoData({ ...todoData!, name: e.target.value })}
-              className={style.text}
-            />
-          </div>
+      <div className={style.detailPage__containner}>
+        <section className={style.detailPage__section_title}>
+          <TodoTitle
+            input_value={todoData?.name}
+            isChecked={todoData?.isCompleted}
+            onClick={onClickTitleChk}
+            onChange={onChangeTitle}
+          />
         </section>
-        <section className={style.section_contents}>
-          <div
-            className={hasImage ? style.img_full_wrapper : style.img_empty_wrapper}
-            style={hasImage ? { backgroundImage: `url(${todoData?.imageUrl})` } : {}}
-          >
-            <label
-              className={style.img_btn}
-              style={{ backgroundColor: hasImage ? '#0F172A80' : 'var(--color-salte-200)' }}
-            >
-              <img
-                src={hasImage ? '/images/icons/edit_icon.svg' : '/images/icons/plus_bl_icon_sm.png'}
-              />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                style={{ display: 'none' }}
-              />
-            </label>
+        <section className={style.detailPage__section_contents}>
+          <div className={style.detailPage__image}>
+            <ImageUploader imageUrl={todoData?.imageUrl} handleImageUpload={handleImageUpload} />
           </div>
-          <div className={style.memo_section}>
+          <div className={style.detailPage__memo}>
             <MemoEditer
               value={todoData?.memo}
               onChangeInput={(value) => setTodoData({ ...todoData!, memo: value })}
             />
           </div>
         </section>
-        <section className={style.section_btn}>
+        <section className={style.detailPage__actions}>
           <Button
             text={updateLoadingText}
             onClick={onClickUpdate}

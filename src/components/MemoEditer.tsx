@@ -22,10 +22,11 @@ const MemoEditer: React.FC<MemoEditerProps> = ({
     textarea.style.height = `${textarea.scrollHeight}px`;
   };
   return (
-    <div className={style.memo_wrapper}>
-      <h2>{title}</h2>
-      <div className={style.memo_text_wrapper} onClick={() => textareaRef.current?.focus()}>
+    <div className={style.memoEditer}>
+      <h2 className={style.memoEditer__title}>{title}</h2>
+      <div className={style.memoEditer__body} onClick={() => textareaRef.current?.focus()}>
         <textarea
+          className={style.memoEditer__textarea}
           ref={textareaRef}
           onInput={handleInput}
           onChange={(e) => onChangeInput(e.target.value)}

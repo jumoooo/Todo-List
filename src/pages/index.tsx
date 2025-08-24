@@ -1,8 +1,8 @@
+import style from './index.module.css';
+
 import { createContext, useCallback, useMemo, useState } from 'react';
 import { InferGetServerSidePropsType } from 'next';
 import { TodoDispatchContextType } from '@/types';
-
-import style from './index.module.css';
 
 import SearchInput from '@/components/SearchInput';
 import Button from '@/components/Button';
@@ -71,11 +71,11 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
   const doneItems = useMemo(() => todoDataList.filter((item) => item.isCompleted), [todoDataList]);
 
   return (
-    <div className={style.Home}>
+    <div className={style.homePage}>
       <Head>
         <title>할 일 목록 페이지</title>
       </Head>
-      <section className={style.section_search}>
+      <section className={style.homePage__section_search}>
         <SearchInput
           placeholder={inputPlaceholder}
           disabled={isCreateLoading}
@@ -90,11 +90,11 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
         />
       </section>
       <TodoDispatchContext.Provider value={{ updateTodo }}>
-        <section className={style.section_list}>
-          <div className={style.list_wrapper}>
+        <section className={style.homePage__section_list}>
+          <div className={style.homePage__list_wrapper}>
             <ItemList listData={todoItems} isDone={false} isRefreshing={isLoading} />
           </div>
-          <div className={style.list_wrapper}>
+          <div className={style.homePage__list_wrapper}>
             <ItemList listData={doneItems} isRefreshing={isLoading} />
           </div>
         </section>

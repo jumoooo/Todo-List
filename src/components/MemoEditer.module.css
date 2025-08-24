@@ -1,4 +1,4 @@
-.memo_wrapper {
+.memoEditer {
   height: 311px;
   width: 100%;
   border-radius: 24px;
@@ -12,7 +12,7 @@
   align-items: center;
   cursor: text;
 }
-.memo_wrapper .memo_text_wrapper {
+.memoEditer__body {
   height: 100%;
   width: 100%;
 
@@ -23,7 +23,7 @@
   scrollbar-width: thin;
   scrollbar-color: #fde68a transparent;
 }
-.memo_text_wrapper > textarea {
+.memoEditer__textarea {
   width: 100%;
   min-height: 30px;
 
@@ -39,7 +39,7 @@
   line-height: 100%;
 }
 
-.memo_wrapper > h2 {
+.memoEditer__title {
   margin: 0;
   padding: 0;
 
