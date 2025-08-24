@@ -31,3 +31,6 @@
 .Item > img {
   cursor: pointer;
 }
+.Item > img:hover {
+  transform: scale(1.05); /* 살짝 확대 */
+}

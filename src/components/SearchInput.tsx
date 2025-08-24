@@ -1,23 +1,23 @@
+import style from './SearchInput.module.css';
+
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import SearchBoxSvg from './SearchBoxSvg';
-
-import style from './SearchInput.module.css';
 
 interface SearchInputProps {
   placeholder?: string;
   disabled?: Boolean;
-  value: string;
+  value?: string;
   onChange: (value: string) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
-export default function SearchInput({
+const SearchInput: React.FC<SearchInputProps> = ({
   placeholder = '할 일을 입력해주세요',
   disabled = false,
   value,
   onChange,
   onKeyDown,
-}: SearchInputProps) {
-  const [containerSize, setContainerSize] = useState({ w: 168, h: 56 }); // 기본값
+}: SearchInputProps) => {
+  const [containerSize, setContainerSize] = useState({ w: 168, h: 56 });
   const containRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -56,4 +56,5 @@ export default function SearchInput({
       </div>
     </div>
   );
-}
+};
+export default React.memo(SearchInput);

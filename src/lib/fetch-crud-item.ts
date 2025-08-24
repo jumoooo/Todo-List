@@ -1,4 +1,5 @@
 import { TodoListData, TodoListUpdateData } from '@/types';
+import { todo } from 'node:test';
 
 const tenantId = 'kjm';
 /**
@@ -91,6 +92,13 @@ export async function fetchUpdateItem(
         memo: todoItemData.memo || '',
         imageUrl: todoItemData.imageUrl || '',
         isCompleted: !todoItemData.isCompleted,
+      };
+    } else {
+      todoData = {
+        ...todoData,
+        name: todoData.name || '',
+        memo: todoData.memo || '',
+        imageUrl: todoData.imageUrl || '',
       };
     }
 

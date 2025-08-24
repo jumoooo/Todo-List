@@ -1,5 +1,6 @@
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import style from './Button.module.css';
+
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import SearchBoxSvg from './SearchBoxSvg';
 
 interface ButtonProps {
@@ -25,9 +26,6 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   const btnRef = useRef<HTMLButtonElement>(null);
   const [btnSize, setBtnSize] = useState({ w: width, h: height }); // 기본값
-  const onBtnClick = () => {
-    onClick();
-  };
 
   useEffect(() => {
     if (!btnRef.current) return;
@@ -49,7 +47,7 @@ const Button: React.FC<ButtonProps> = ({
   }, []);
   return (
     <button
-      onClick={onBtnClick}
+      onClick={onClick}
       className={style.btn}
       ref={btnRef}
       style={holdSize ? { width: width, height: height } : {}}
