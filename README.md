@@ -1,40 +1,61 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 📝 Codeit Todo List
 
-## Getting Started
+이 프로젝트는 **Next.js**와 TypeScript로 개발된 **할일 관리(Todo List) 웹 애플리케이션**입니다.  
+사용자는 할일을 **추가, 조회, 수정, 삭제**할 수 있으며, 이미지와 메모를 함께 관리할 수 있습니다.
 
-First, run the development server:
+[🔗 Vercel 배포 링크](https://codeit-todo-list-five.vercel.app/)
+
+---
+
+## ⚡ 주요 기능
+
+### 메인 페이지
+
+- 텍스트 입력 후 **Enter** 키 또는 **추가하기 버튼**으로 새로운 할일 등록
+  - 연속 클릭으로 인한 중복 추가 방지
+- 화면 중간에 할일 리스트 표시
+  - **체크 버튼** 클릭 시 완료/할일 상태 전환
+    - Todo → 완료
+    - 완료 → Todo
+  - 체크 버튼 외 다른 부분 클릭 시 **상세 페이지**로 이동
+
+### 할일 상세 페이지
+
+- **제목, 이미지, 메모** 수정 가능
+- 이미지 업로드 제한
+  - 최대 용량: 5MB
+  - 파일 이름: 영문과 숫자만 가능
+- **수정 버튼** 클릭 시 변경 사항 저장 후 홈 페이지로 이동
+- **삭제 버튼** 클릭 시 확인 후 삭제 후 홈 페이지로 이동
+
+### 추가 기능
+
+- 버튼과 아이템 이미지 모두 **SVG 컴포넌트**로 구현
+- 폰트는 최적화를 위해 **woff2** 적용
+- 각 페이지마다 **Head**를 활용하여 동적 타이틀 설정
+- 모바일, 태블릿, 데스크탑 모두 대응 가능한 **반응형 UI**
+- 추가, 수정, 삭제 시 **중복 입력 제어** 적용
+- 추가, 수정, 삭제 시 데이터 리렌더링, 로딩 변수 관리하는 커스텀 Hook(useFetchWithRefetch) 사용 함
+
+---
+
+### 파일 구조
+
+- pages/: Next.js 페이지 (index.tsx, items/[id].tsx)
+- components/: 재사용 가능한 컴포넌트 (Button, Item, TodoTitle, ImageUploader, MemoEditor 등)
+- lib/: API 요청 함수
+- hooks/: 커스텀 훅
+- types/: TypeScript 타입 정의
+
+## 🚀 개발 환경
+
+### 설치 및 실행
 
 ```bash
+npm install
 npm run dev
-# or
+# 또는
 yarn dev
-# or
+# 또는
 pnpm dev
-# or
-bun dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

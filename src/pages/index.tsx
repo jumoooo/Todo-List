@@ -8,9 +8,9 @@ import SearchInput from '@/components/SearchInput';
 import Button from '@/components/Button';
 import ItemList from '@/components/ItemList';
 
-import { fetchCreateItems, fetchGetItems, fetchUpdateItem } from '@/lib/fetch-crud-item';
+import { fetchCreateItems, fetchGetItems, fetchUpdateItem } from '@/lib/todo_api';
 import Head from 'next/head';
-import { useRefetchLoading } from '@/hooks/useRefetchLoading';
+import { useFetchWithRefetch } from '@/hooks/useFetchWithRefetch';
 
 export const getServerSideProps = async () => {
   // 최초 SSR 에서 목록 받아오기
@@ -37,11 +37,11 @@ export default function Home({ todoData }: InferGetServerSidePropsType<typeof ge
     }
   }, []);
 
-  const { fetching: createItem, isLoading: isCreateLoading } = useRefetchLoading(
+  const { fetching: createItem, isLoading: isCreateLoading } = useFetchWithRefetch(
     refetchList,
     fetchCreateItems,
   );
-  const { fetching: updateTodo, isLoading } = useRefetchLoading(refetchList, fetchUpdateItem);
+  const { fetching: updateTodo, isLoading } = useFetchWithRefetch(refetchList, fetchUpdateItem);
 
   // 할 일 생성
   const createNewName = useCallback(async () => {

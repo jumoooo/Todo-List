@@ -1,13 +1,13 @@
 import style from './[id].module.css';
 
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
-import { fetchGetIdItem, fetchUpdateItem, fetchUploadImage } from '@/lib/fetch-crud-item';
+import { fetchGetIdItem, fetchUpdateItem, fetchUploadImage } from '@/lib/todo_api';
 import { useCallback, useState } from 'react';
 import { TodoListUpdateData } from '@/types';
 import { useParams } from 'next/navigation';
 import { useDeleteTodo } from '@/hooks/useDeleteTodo';
 import { useRouter } from 'next/router';
-import { useRefetchLoading } from '@/hooks/useRefetchLoading';
+import { useFetchWithRefetch } from '@/hooks/useFetchWithRefetch';
 
 import Head from 'next/head';
 import TodoTitle from '@/components/TodoTitle';
@@ -41,7 +41,7 @@ export default function ItemDetail({
     }
   }, [param]);
 
-  const { fetching: updateTodo, isLoading: updateLoading } = useRefetchLoading(
+  const { fetching: updateTodo, isLoading: updateLoading } = useFetchWithRefetch(
     refetchList,
     fetchUpdateItem,
   );
@@ -142,7 +142,7 @@ export default function ItemDetail({
             onClick={onClickUpdate}
             holdSize={true}
             child={<img src="/images/icons/check_icon.svg" width={16} height={16} />}
-            color={todoData?.isCompleted ? 'var(--color-rose-300)' : ''}
+            color={todoData?.isCompleted ? 'var(--color-rose-300)' : 'var(--color-salte-200)'}
           />
           <Button
             text={deleteLoadingText}

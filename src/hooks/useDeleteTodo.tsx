@@ -1,4 +1,4 @@
-import { fetchDeleteItem } from '@/lib/fetch-crud-item';
+import { fetchDeleteItem } from '@/lib/todo_api';
 import { useCallback, useState } from 'react';
 
 // 삭제 진행, 로딩 전달

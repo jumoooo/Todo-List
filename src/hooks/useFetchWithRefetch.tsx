@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
  * @template T - fetch 함수 반환 타입
  * @template P - fetch 함수 파라미터 타입
  */
-export function useRefetchLoading<T>(
+export function useFetchWithRefetch<T>(
   refetchList: () => Promise<void>,
   fetchs: (...args: any[]) => Promise<T>,
 ) {
