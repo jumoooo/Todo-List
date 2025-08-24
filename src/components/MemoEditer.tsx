@@ -1,6 +1,6 @@
 import style from './MemoEditer.module.css';
 
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface MemoEditerProps {
   title?: string;
@@ -21,6 +21,15 @@ const MemoEditer: React.FC<MemoEditerProps> = ({
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
   };
+  const resizeHeight = (textarea: HTMLTextAreaElement) => {
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  };
+  useEffect(() => {
+    if (textareaRef.current) {
+      resizeHeight(textareaRef.current);
+    }
+  }, [value]);
   return (
     <div className={style.memoEditer}>
       <h2 className={style.memoEditer__title}>{title}</h2>
