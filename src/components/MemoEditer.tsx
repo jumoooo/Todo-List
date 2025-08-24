@@ -16,14 +16,12 @@ const MemoEditer: React.FC<MemoEditerProps> = ({
   onChangeInput,
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const textarea = e.target;
-    textarea.style.height = 'auto';
-    textarea.style.height = `${textarea.scrollHeight}px`;
-  };
   const resizeHeight = (textarea: HTMLTextAreaElement) => {
     textarea.style.height = 'auto';
     textarea.style.height = `${textarea.scrollHeight}px`;
+  };
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    resizeHeight(e.target);
   };
   useEffect(() => {
     if (textareaRef.current) {
