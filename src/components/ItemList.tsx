@@ -19,19 +19,19 @@ const TitleList: React.FC<ButtonProps> = ({ listData, isDone = true, isRefreshin
   const title_src = useMemo(() => (isDone ? '/images/done.svg' : '/images/todo.svg'), [isDone]);
 
   return (
-    <div className={style.TitleList}>
-      <div className={style.todo_list}>
-        <img className={style.title} src={title_src} />
-        <div className={style.list}>
+    <div className={style.titleList}>
+      <div className={style.titleList__container}>
+        <img className={style.titleList__title} src={title_src} />
+        <div className={style.titleList__items}>
           {isRefreshing ? (
-            <div className={style.non_data}>
+            <div className={style.titleList__empty}>
               <p>{'목록 갱신 중...'}</p>
             </div>
           ) : !listData || listData.length <= 0 ? (
-            <div className={style.non_data}>
-              <img src={non_src} />
-              <p>{'할일이 없어요.'}</p>
-              <p>{'TODO를 새롭게 추가해주세요!'}</p>
+            <div className={style.titleList__empty}>
+              <img className={style.titleList__empty_img} src={non_src} />
+              <p className={style.titleList__text}>{'할일이 없어요.'}</p>
+              <p className={style.titleList__text}>{'TODO를 새롭게 추가해주세요!'}</p>
             </div>
           ) : (
             listData.map((item) => <Item key={item?.id} {...item} />)

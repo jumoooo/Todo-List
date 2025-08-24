@@ -91,7 +91,7 @@ export default function ItemDetail({
     };
     // 변경
     await updateTodo(id, updateData);
-    window.alert('수정 완료되었습니다.');
+    if (!updateLoading) router.push('/');
   }, [id, todoData, updateLoading]);
 
   // 삭제 버튼 클릭
@@ -142,6 +142,7 @@ export default function ItemDetail({
             onClick={onClickUpdate}
             holdSize={true}
             child={<img src="/images/icons/check_icon.svg" width={16} height={16} />}
+            color={todoData?.isCompleted ? 'var(--color-rose-300)' : ''}
           />
           <Button
             text={deleteLoadingText}

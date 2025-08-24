@@ -21,7 +21,7 @@ const Item: React.FC<ItemProps> = ({ id, isCompleted = true, name = '' }) => {
   return (
     <Link
       href={`/items/${id}`}
-      className={style.Item}
+      className={style.todoItem}
       style={
         isCompleted
           ? { backgroundColor: 'var(--color-violet-100)' }
@@ -29,6 +29,7 @@ const Item: React.FC<ItemProps> = ({ id, isCompleted = true, name = '' }) => {
       }
     >
       <img
+        className={style.todoItem__icon}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -36,7 +37,10 @@ const Item: React.FC<ItemProps> = ({ id, isCompleted = true, name = '' }) => {
         }}
         src={img_src}
       />
-      <h1 className={style.text} style={isCompleted ? { textDecoration: 'line-through' } : {}}>
+      <h1
+        className={style.todoItem__text}
+        style={isCompleted ? { textDecoration: 'line-through' } : {}}
+      >
         {name}
       </h1>
     </Link>

@@ -1,4 +1,4 @@
-.Item {
+.todoItem {
   height: 50px;
   width: 100%;
 
@@ -16,8 +16,18 @@
   color: black;
   text-decoration: none;
 }
+.todoItem:hover {
+  transform: scale(1.05);
+}
 
-.text {
+.todoItem__icon {
+  cursor: pointer;
+}
+.todoItem__icon:hover {
+  transform: scale(1.1);
+}
+
+.todoItem__text {
   font-size: 16px;
   font-weight: 400;
 
@@ -26,11 +36,4 @@
   letter-spacing: 0%;
   text-align: center;
   vertical-align: middle;
-}
-
-.Item > img {
-  cursor: pointer;
-}
-.Item > img:hover {
-  transform: scale(1.05); /* 살짝 확대 */
 }
