@@ -1,0 +1,53 @@
+.memo_wrapper {
+  height: 311px;
+  width: 100%;
+  border-radius: 24px;
+
+  background-image: url('/images/memo.svg');
+  padding: 24px 16px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  cursor: text;
+}
+.memo_wrapper .memo_text_wrapper {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #fde68a transparent;
+}
+.memo_text_wrapper > textarea {
+  width: 100%;
+  min-height: 30px;
+
+  background-color: transparent;
+  text-align: center;
+  overflow-y: hidden;
+  resize: none;
+  border: none;
+  outline: none;
+
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+}
+
+.memo_wrapper > h2 {
+  margin: 0;
+  padding: 0;
+
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 100%;
+  text-align: center;
+  vertical-align: middle;
+  color: var(--color-amber-800);
+  cursor: default;
+}

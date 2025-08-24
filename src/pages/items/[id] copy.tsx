@@ -11,7 +11,6 @@ import Head from 'next/head';
 import { useRefetchLoading } from '@/hooks/useRefetchLoading';
 
 import Button from '@/components/Button';
-import MemoEditer from '@/components/MemoEditer';
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const id = context.params?.id;
@@ -25,9 +24,16 @@ export default function ItemDetail({
   item,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [todoData, setTodoData] = useState(item);
+  const memoRef = useRef<HTMLDivElement>(null);
   const param = useParams();
   const id = Number(param.id);
   const router = useRouter();
+
+  useEffect(() => {
+    if (memoRef.current && todoData?.memo) {
+      memoRef.current.innerText = todoData.memo;
+    }
+  }, []);
 
   // 화면 데이터 리프레쉬
   const refetchList = useCallback(async () => {
@@ -113,18 +119,10 @@ export default function ItemDetail({
   const deleteLoadingText = deleteLoading ? '로딩중...' : '삭제하기';
   const hasImage = Boolean(todoData?.imageUrl);
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const textarea = e.target;
-    textarea.style.height = 'auto'; // 초기화
-    textarea.style.height = `${textarea.scrollHeight}px`; // 실제 내용 높이만큼 늘림
-  };
-
   return (
     <div className={style.detailPage}>
       <Head>
-        <title>할 일 상세 페이지</title>
+        <title>{todoData?.name} (할 일 상세 페이지)</title>
       </Head>
       <div className={style.detailContainer}>
         <section className="section_title">
@@ -160,11 +158,16 @@ export default function ItemDetail({
               />
             </label>
           </div>
-          <div className={style.memo_section}>
-            <MemoEditer
-              value={todoData?.memo}
-              onChangeInput={(value) => setTodoData({ ...todoData!, memo: value })}
-            />
+          <div className={style.memo_wrapper}>
+            <h2>Memo</h2>
+            <div
+              ref={memoRef}
+              contentEditable
+              suppressContentEditableWarning
+              onInput={(e) =>
+                setTodoData({ ...todoData!, memo: (e.target as HTMLElement).innerText })
+              }
+            ></div>
           </div>
         </section>
         <section className={style.section_btn}>
